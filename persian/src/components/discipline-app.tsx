@@ -80,6 +80,7 @@ export function DisciplineApp() {
   const [feeling,setFeeling]=useState("خستگی");
   const [lesson,setLesson]=useState("");
   const [toast,setToast]=useState("");
+  const [sidebarOpen,setSidebarOpen]=useState(false);
 
   useEffect(()=>localStorage.setItem("personal-growth-data",JSON.stringify({records,commitments,mistakeTypes})),[records,commitments,mistakeTypes]);
   useEffect(()=>{ document.documentElement.classList.toggle("dark",dark); },[dark]);
@@ -148,13 +149,14 @@ export function DisciplineApp() {
   </div></div>;
 
   return <div className="app-shell">
-    <aside className="sidebar" style={{background:"#18233a"}}>
+    {sidebarOpen&&<div className="sidebar-overlay" onClick={()=>setSidebarOpen(false)}/>}
+    <aside className={"sidebar"+(sidebarOpen?" open":"")} style={{background:"#18233a"}}>
       <div className="brand"><div className="brand-mark" style={{background:"#6257d5"}}><Leaf size={21}/></div><div><b>مسیر من</b><div style={{fontSize:10,opacity:.65}}>دفتر شخصی رشد و خودآگاهی</div></div></div>
-      <div className="nav">{nav.map(([id,label,Icon])=><button key={id} className={page===id?"active":""} onClick={()=>setPage(id)}><Icon size={18}/><span>{label}</span>{id==="commitments"&&<span className="badge purple" style={{marginRight:"auto"}}>{pending.length.toLocaleString("fa-IR")}</span>}</button>)}</div>
+      <div className="nav">{nav.map(([id,label,Icon])=><button key={id} className={page===id?"active":""} onClick={()=>{setPage(id);setSidebarOpen(false)}}><Icon size={18}/><span>{label}</span>{id==="commitments"&&<span className="badge purple" style={{marginRight:"auto"}}>{pending.length.toLocaleString("fa-IR")}</span>}</button>)}</div>
       <div className="gentle-note"><Sparkles size={16}/><span>هدف کامل‌بودن نیست؛ هدف آگاه‌ترشدن و انتخاب بهتر در دفعه بعد است.</span></div>
       <div style={{marginTop:"auto",borderTop:"1px solid #ffffff18",paddingTop:15}}><div className="person"><div className="avatar">م</div><div><b style={{fontSize:13}}>فضای شخصی من</b><div style={{fontSize:10,opacity:.6}}>خصوصی و امن</div></div></div><button className="btn" onClick={()=>{sessionStorage.removeItem(sessionStorageKey);setAuthenticated(false)}} style={{color:"#cbd8ef",background:"transparent",marginTop:10}}><LogOut size={16}/> خروج</button></div>
     </aside>
-    <main className="main"><header className="header"><div style={{display:"flex",alignItems:"center",gap:10}}><button className="btn btn-soft mobile-menu"><Menu size={18}/></button><div className="search"><Search size={16} color="var(--muted)"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="جست‌وجوی یک الگو یا یادداشت..."/></div></div><div style={{display:"flex",gap:8}}><button className="btn btn-soft" onClick={()=>setDark(v=>!v)}>{dark?<Sun size={18}/>:<Moon size={18}/>}</button><button className="btn btn-soft"><Bell size={18}/></button></div></header>
+    <main className="main"><header className="header"><div style={{display:"flex",alignItems:"center",gap:10}}><button className="btn btn-soft mobile-menu" onClick={()=>setSidebarOpen(v=>!v)}><Menu size={18}/></button><div className="search"><Search size={16} color="var(--muted)"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="جست‌وجوی یک الگو یا یادداشت..."/></div></div><div style={{display:"flex",gap:8}}><button className="btn btn-soft" onClick={()=>setDark(v=>!v)}>{dark?<Sun size={18}/>:<Moon size={18}/>}</button><button className="btn btn-soft"><Bell size={18}/></button></div></header>
       <div className="content"><div className="topline"><div><h1>{title}</h1><div className="muted">پنجشنبه، ۱ اسد · امروز فرصتی تازه است</div></div><button className="btn btn-primary" onClick={()=>setPage("mistakes")}><Plus size={17}/> ثبت یک اتفاق</button></div>
         {page==="dashboard"&&<Dashboard records={records} commitments={commitments} mistake={mistake} go={setPage}/>}
         {page==="mistakes"&&<MistakesView items={filtered} records={records} open={setModal} home={()=>setPage("dashboard")} create={()=>setCustomModal(true)}/>}

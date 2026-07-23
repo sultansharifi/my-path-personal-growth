@@ -134,9 +134,17 @@ th, td { padding: 12px; border-bottom: 1px solid var(--line); white-space: nowra
   .grid-2 { grid-template-columns: 1fr; }
   .mistake-grid { grid-template-columns: repeat(2,1fr); }
 }
+.sidebar-overlay { display:none; }
 @media(max-width: 760px) {
   .app-shell { display:block; }
   .sidebar { display:none; }
+  .sidebar.open {
+    display: flex; position: fixed; inset: 0 15% 0 0; z-index: 60;
+    box-shadow: 20px 0 40px #00000055;
+  }
+  .sidebar-overlay {
+    display: block; position: fixed; inset: 0; background: #09132899; z-index: 55;
+  }
   .header { padding:0 15px; }
   .mobile-menu { display:grid; }
   .content { padding:18px 14px 90px; }

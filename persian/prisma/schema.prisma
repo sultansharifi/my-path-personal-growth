@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ItemStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum CommitmentStatus {
+  PENDING
+  DONE
+  SKIPPED
+}
+
+model User {
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  passwordHash String
+  timezone     String       @default("Asia/Kabul")
+  locale       String       @default("fa")
+  dailyReview  String       @default("21:00")
+  patterns     Pattern[]
+  entries      Reflection[]
+  commitments  Commitment[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  deletedAt    DateTime?
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  color     String
+  icon      String
+  patterns  Pattern[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Pattern {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryId  String
+  category    Category     @relation(fields: [categoryId], references: [id])
+  name        String
+  trigger     String?
+  intention   String?
+  color       String
+  status      ItemStatus   @default(ACTIVE)
+  reflections Reflection[]
+  commitments Commitment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+  @@unique([userId, name])
+}
+
+model Reflection {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  patternId   String
+  pattern     Pattern      @relation(fields: [patternId], references: [id])
+  note        String
+  feeling     String?
+  lesson      String?
+  occurredAt  DateTime
+  commitments Commitment[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  deletedAt   DateTime?
+  @@index([userId, occurredAt])
+  @@index([patternId, occurredAt])
+}
+
+model Commitment {
+  id           String           @id @default(cuid())
+  userId       String
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  patternId    String
+  pattern      Pattern          @relation(fields: [patternId], references: [id])
+  reflectionId String?
+  reflection   Reflection?      @relation(fields: [reflectionId], references: [id])
+  title        String
+  reason       String?
+  dueAt        DateTime?
+  completedAt  DateTime?
+  status       CommitmentStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  deletedAt    DateTime?
+  @@index([userId, status, dueAt])
+}
+
+model DailyReview {
+  id        String   @id @default(cuid())
+  userId    String
+  mood      Int?
+  energy    Int?
+  note      String?
+  reviewedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  @@unique([userId, reviewedAt])
+}

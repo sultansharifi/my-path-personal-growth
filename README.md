@@ -2,6 +2,16 @@
 
 A private personal growth application for reflecting on mistakes, recognizing recurring patterns, and turning each experience into a small practical commitment.
 
+## Live websites
+
+- [Open the Persian version](https://my-path-persian.ruby-carp-8836.chatgpt.site)
+- [Open the English version](https://my-path-english.ruby-carp-8836.chatgpt.site)
+
+## نسخه‌های آنلاین
+
+- [بازکردن نسخهٔ فارسی](https://my-path-persian.ruby-carp-8836.chatgpt.site)
+- [بازکردن نسخهٔ انگلیسی](https://my-path-english.ruby-carp-8836.chatgpt.site)
+
 ## Versions
 
 - [`persian/`](./persian) — نسخه فارسی با رابط کامل راست‌به‌چپ

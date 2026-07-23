@@ -36,12 +36,12 @@ export function DisciplineApp(){
   const [authenticated,setAuthenticated]=useState(()=>typeof window!=="undefined"&&Boolean(sessionStorage.getItem(sessionStorageKey)));
   const [authMode,setAuthMode]=useState<"login"|"signup">("login");
   const [page,setPage]=useState("dashboard"),[dark,setDark]=useState(false),[query,setQuery]=useState(""),[error,setError]=useState("");
-  const load=()=>{if(typeof window==="undefined")return null;try{return JSON.parse(localStorage.getItem("personal-growth-en")??"")}catch{return null}};
+  const load=()=>{if(typeof window==="undefined")return null;try{return JSON.parse(localStorage.getItem("personal-growth-en-v2")??"")}catch{return null}};
   const [records,setRecords]=useState<RecordItem[]>(()=>load()?.records??seedRecords);
   const [commitments,setCommitments]=useState<Commitment[]>(()=>load()?.commitments??seedCommitments);
   const [patterns,setPatterns]=useState<Mistake[]>(()=>load()?.patterns??defaults);
   const [modal,setModal]=useState<Mistake|null>(null),[custom,setCustom]=useState(false),[note,setNote]=useState(""),[feeling,setFeeling]=useState("Tired"),[lesson,setLesson]=useState(""),[toast,setToast]=useState(""),[sidebarOpen,setSidebarOpen]=useState(false);
-  useEffect(()=>localStorage.setItem("personal-growth-en",JSON.stringify({records,commitments,patterns})),[records,commitments,patterns]);
+  useEffect(()=>localStorage.setItem("personal-growth-en-v2",JSON.stringify({records,commitments,patterns})),[records,commitments,patterns]);
   useEffect(()=>{document.documentElement.classList.toggle("dark",dark)},[dark]);
   useEffect(()=>{if(!toast)return;const id=setTimeout(()=>setToast(""),2600);return()=>clearTimeout(id)},[toast]);
   const mistake=(id:number)=>patterns.find(m=>m.id===id)!;

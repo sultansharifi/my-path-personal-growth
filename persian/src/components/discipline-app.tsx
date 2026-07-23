@@ -12,6 +12,19 @@ import { deadlineState } from "@/lib/penalty-engine";
 type Mistake = { id:number; name:string; category:string; color:string; count:number; trigger:string; intention:string };
 type RecordItem = { id:number; mistakeId:number; date:string; iso:string; note:string; feeling:string; lesson:string };
 type Commitment = { id:number; mistakeId:number; title:string; due:string; status:"pending"|"done"; reason:string };
+type LocalAccount = { name:string; email:string; passwordHash:string; salt:string };
+
+const accountStorageKey = "my-path-local-accounts";
+const sessionStorageKey = "my-path-current-account";
+
+async function hashPassword(password:string,salt:string){
+  const bytes=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(`${salt}:${password}`));
+  return Array.from(new Uint8Array(bytes),byte=>byte.toString(16).padStart(2,"0")).join("");
+}
+
+function loadAccounts():LocalAccount[]{
+  try{return JSON.parse(localStorage.getItem(accountStorageKey)??"[]")}catch{return []}
+}
 
 const defaultMistakeTypes:Mistake[] = [
   {id:1,name:"به‌تعویق انداختن کارها",category:"بهره‌وری",color:"#6d63d9",count:7,trigger:"کارهای بزرگ و مبهم",intention:"فقط ۵ دقیقه شروع می‌کنم"},
@@ -43,7 +56,8 @@ const nav=[
 ] as const;
 
 export function DisciplineApp() {
-  const [authenticated,setAuthenticated]=useState(()=>typeof window!=="undefined"&&sessionStorage.getItem("personal-session")==="me");
+  const [authenticated,setAuthenticated]=useState(()=>typeof window!=="undefined"&&Boolean(sessionStorage.getItem(sessionStorageKey)));
+  const [authMode,setAuthMode]=useState<"login"|"signup">("login");
   const [loginError,setLoginError]=useState("");
   const [page,setPage]=useState("dashboard");
   const [dark,setDark]=useState(false);
@@ -77,10 +91,28 @@ export function DisciplineApp() {
   const title=nav.find(n=>n[0]===page)?.[1]??"امروز من";
   const occurrence=(id:number)=>records.filter(r=>r.mistakeId===id).length+1;
 
-  function login(e:React.FormEvent<HTMLFormElement>){
-    e.preventDefault();const data=new FormData(e.currentTarget);
-    if(data.get("email")==="me@example.com"&&data.get("password")==="MyJourney123!"){sessionStorage.setItem("personal-session","me");setAuthenticated(true);setLoginError("")}
-    else setLoginError("ایمیل یا رمز عبور درست نیست.");
+  async function handleAuth(e:React.FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    const data=new FormData(e.currentTarget);
+    const email=String(data.get("email")??"").trim().toLowerCase();
+    const password=String(data.get("password")??"");
+    const accounts=loadAccounts();
+    if(authMode==="signup"){
+      const name=String(data.get("name")??"").trim();
+      const confirmation=String(data.get("confirmation")??"");
+      if(password.length<8){setLoginError("گذرواژه باید دست‌کم ۸ نویسه داشته باشد.");return}
+      if(password!==confirmation){setLoginError("گذرواژه و تکرار آن یکسان نیست.");return}
+      if(accounts.some(account=>account.email===email)){setLoginError("برای این نشانی رایانامه قبلاً حساب ساخته شده است.");return}
+      const salt=crypto.randomUUID();
+      const account:LocalAccount={name,email,salt,passwordHash:await hashPassword(password,salt)};
+      localStorage.setItem(accountStorageKey,JSON.stringify([...accounts,account]));
+      sessionStorage.setItem(sessionStorageKey,email);
+      setAuthenticated(true);setLoginError("");return;
+    }
+    const account=accounts.find(item=>item.email===email);
+    if(account&&await hashPassword(password,account.salt)===account.passwordHash){
+      sessionStorage.setItem(sessionStorageKey,email);setAuthenticated(true);setLoginError("");
+    }else setLoginError("نشانی رایانامه یا گذرواژه درست نیست.");
   }
   function register(){
     if(!modal)return;
@@ -110,8 +142,9 @@ export function DisciplineApp() {
   if(!authenticated)return <div className="login-page"><div className="login-card card">
     <div className="brand-mark" style={{margin:"0 auto 16px",color:"white",background:"#6257d5"}}><Leaf size={22}/></div>
     <h1>مسیر من</h1><p className="muted">فضای خصوصی برای دیدن الگوها و بهترشدن، بدون قضاوت</p>
-    <form onSubmit={login}><label>ایمیل<input className="field" name="email" type="email" defaultValue="me@example.com" required/></label><label>رمز عبور<input className="field" name="password" type="password" defaultValue="MyJourney123!" required/></label>{loginError&&<div className="login-error">{loginError}</div>}<button className="btn btn-primary"><Heart size={17}/> ورود به فضای شخصی</button></form>
-    <div className="demo-hint">اطلاعات آزمایشی حساب شخصی از قبل وارد شده است.</div>
+    <div className="auth-switch"><button className={authMode==="login"?"active":""} onClick={()=>{setAuthMode("login");setLoginError("")}}>ورود</button><button className={authMode==="signup"?"active":""} onClick={()=>{setAuthMode("signup");setLoginError("")}}>ساخت حساب</button></div>
+    <form onSubmit={handleAuth}>{authMode==="signup"&&<label>نام شما<input className="field" name="name" autoComplete="name" required/></label>}<label>نشانی رایانامه<input className="field" name="email" type="email" autoComplete="email" required/></label><label>گذرواژه<input className="field" name="password" type="password" minLength={8} autoComplete={authMode==="signup"?"new-password":"current-password"} required/></label>{authMode==="signup"&&<label>تکرار گذرواژه<input className="field" name="confirmation" type="password" minLength={8} autoComplete="new-password" required/></label>}{loginError&&<div className="login-error">{loginError}</div>}<button className="btn btn-primary"><Heart size={17}/> {authMode==="signup"?"ساخت حساب و ورود":"ورود به فضای شخصی"}</button></form>
+    <div className="privacy-hint">اطلاعات حساب و یادداشت‌ها فقط در همین مرورگر نگهداری می‌شود.</div>
   </div></div>;
 
   return <div className="app-shell">
@@ -119,7 +152,7 @@ export function DisciplineApp() {
       <div className="brand"><div className="brand-mark" style={{background:"#6257d5"}}><Leaf size={21}/></div><div><b>مسیر من</b><div style={{fontSize:10,opacity:.65}}>دفتر شخصی رشد و خودآگاهی</div></div></div>
       <div className="nav">{nav.map(([id,label,Icon])=><button key={id} className={page===id?"active":""} onClick={()=>setPage(id)}><Icon size={18}/><span>{label}</span>{id==="commitments"&&<span className="badge purple" style={{marginRight:"auto"}}>{pending.length.toLocaleString("fa-IR")}</span>}</button>)}</div>
       <div className="gentle-note"><Sparkles size={16}/><span>هدف کامل‌بودن نیست؛ هدف آگاه‌ترشدن و انتخاب بهتر در دفعه بعد است.</span></div>
-      <div style={{marginTop:"auto",borderTop:"1px solid #ffffff18",paddingTop:15}}><div className="person"><div className="avatar">م</div><div><b style={{fontSize:13}}>فضای شخصی من</b><div style={{fontSize:10,opacity:.6}}>خصوصی و امن</div></div></div><button className="btn" onClick={()=>{sessionStorage.removeItem("personal-session");setAuthenticated(false)}} style={{color:"#cbd8ef",background:"transparent",marginTop:10}}><LogOut size={16}/> خروج</button></div>
+      <div style={{marginTop:"auto",borderTop:"1px solid #ffffff18",paddingTop:15}}><div className="person"><div className="avatar">م</div><div><b style={{fontSize:13}}>فضای شخصی من</b><div style={{fontSize:10,opacity:.6}}>خصوصی و امن</div></div></div><button className="btn" onClick={()=>{sessionStorage.removeItem(sessionStorageKey);setAuthenticated(false)}} style={{color:"#cbd8ef",background:"transparent",marginTop:10}}><LogOut size={16}/> خروج</button></div>
     </aside>
     <main className="main"><header className="header"><div style={{display:"flex",alignItems:"center",gap:10}}><button className="btn btn-soft mobile-menu"><Menu size={18}/></button><div className="search"><Search size={16} color="var(--muted)"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="جست‌وجوی یک الگو یا یادداشت..."/></div></div><div style={{display:"flex",gap:8}}><button className="btn btn-soft" onClick={()=>setDark(v=>!v)}>{dark?<Sun size={18}/>:<Moon size={18}/>}</button><button className="btn btn-soft"><Bell size={18}/></button></div></header>
       <div className="content"><div className="topline"><div><h1>{title}</h1><div className="muted">پنجشنبه، ۱ اسد · امروز فرصتی تازه است</div></div><button className="btn btn-primary" onClick={()=>setPage("mistakes")}><Plus size={17}/> ثبت یک اتفاق</button></div>

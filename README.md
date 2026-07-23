@@ -4,13 +4,13 @@ A private personal growth application for reflecting on mistakes, recognizing re
 
 ## Live websites
 
-- [Open the Persian version](https://my-path-persian.ruby-carp-8836.chatgpt.site)
-- [Open the English version](https://my-path-english.ruby-carp-8836.chatgpt.site)
+- [Open the Persian version](https://sultansharifi.github.io/my-path-personal-growth/persian/)
+- [Open the English version](https://sultansharifi.github.io/my-path-personal-growth/english/)
 
 ## نسخه‌های آنلاین
 
-- [بازکردن نسخهٔ فارسی](https://my-path-persian.ruby-carp-8836.chatgpt.site)
-- [بازکردن نسخهٔ انگلیسی](https://my-path-english.ruby-carp-8836.chatgpt.site)
+- [بازکردن نسخهٔ فارسی](https://sultansharifi.github.io/my-path-personal-growth/persian/)
+- [بازکردن نسخهٔ انگلیسی](https://sultansharifi.github.io/my-path-personal-growth/english/)
 
 ## Versions
 
@@ -26,9 +26,8 @@ Both versions include:
 - History, insights, reminders, dark mode, and responsive design
 - PostgreSQL/Prisma schema, seed data, tests, and deployment documentation
 
-## Demo account
+## Accounts
 
-- Email: `me@example.com`
-- Password: `MyJourney123!`
+Create your own account from the sign-up tab. The account and journal data are stored privately in the current browser.
 
 Open the README inside either language folder for installation and run instructions.

@@ -58,15 +58,15 @@ export function DisciplineApp() {
   const [query,setQuery]=useState("");
   const [records,setRecords]=useState<RecordItem[]>(()=>{
     if(typeof window==="undefined") return initialRecords;
-    try{return JSON.parse(localStorage.getItem("personal-growth-data")??"").records??initialRecords}catch{return initialRecords}
+    try{return JSON.parse(localStorage.getItem("personal-growth-data-v2")??"").records??initialRecords}catch{return initialRecords}
   });
   const [commitments,setCommitments]=useState<Commitment[]>(()=>{
     if(typeof window==="undefined") return initialCommitments;
-    try{return JSON.parse(localStorage.getItem("personal-growth-data")??"").commitments??initialCommitments}catch{return initialCommitments}
+    try{return JSON.parse(localStorage.getItem("personal-growth-data-v2")??"").commitments??initialCommitments}catch{return initialCommitments}
   });
   const [mistakeTypes,setMistakeTypes]=useState<Mistake[]>(()=>{
     if(typeof window==="undefined") return defaultMistakeTypes;
-    try{return JSON.parse(localStorage.getItem("personal-growth-data")??"").mistakeTypes??defaultMistakeTypes}catch{return defaultMistakeTypes}
+    try{return JSON.parse(localStorage.getItem("personal-growth-data-v2")??"").mistakeTypes??defaultMistakeTypes}catch{return defaultMistakeTypes}
   });
   const [modal,setModal]=useState<Mistake|null>(null);
   const [customModal,setCustomModal]=useState(false);
@@ -76,7 +76,7 @@ export function DisciplineApp() {
   const [toast,setToast]=useState("");
   const [sidebarOpen,setSidebarOpen]=useState(false);
 
-  useEffect(()=>localStorage.setItem("personal-growth-data",JSON.stringify({records,commitments,mistakeTypes})),[records,commitments,mistakeTypes]);
+  useEffect(()=>localStorage.setItem("personal-growth-data-v2",JSON.stringify({records,commitments,mistakeTypes})),[records,commitments,mistakeTypes]);
   useEffect(()=>{ document.documentElement.classList.toggle("dark",dark); },[dark]);
   useEffect(()=>{if(!toast)return;const id=setTimeout(()=>setToast(""),2600);return()=>clearTimeout(id)},[toast]);
 

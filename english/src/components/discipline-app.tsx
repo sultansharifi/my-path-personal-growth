@@ -14,28 +14,22 @@ async function hashPassword(password:string,salt:string){const bytes=await crypt
 function loadAccounts():LocalAccount[]{try{return JSON.parse(localStorage.getItem(accountStorageKey)??"[]")}catch{return []}}
 
 const defaults:Mistake[]=[
-  {id:1,name:"Procrastinating",category:"Productivity",color:"#6d63d9",count:7,trigger:"Large or unclear tasks",intention:"I will start with just five minutes"},
-  {id:2,name:"Too much phone time",category:"Focus",color:"#3676d8",count:5,trigger:"Tiredness or boredom",intention:"I will leave my phone outside the room"},
-  {id:3,name:"Going to bed late",category:"Health",color:"#8055c8",count:4,trigger:"Watching videos at night",intention:"I will turn screens off at 10:30"},
-  {id:4,name:"Reacting too quickly",category:"Relationships",color:"#dd5f69",count:3,trigger:"Feeling ignored",intention:"I will take three breaths before replying"},
-  {id:5,name:"Unplanned spending",category:"Money",color:"#df9638",count:2,trigger:"Online sales",intention:"I will use the 24-hour waiting rule"},
-  {id:6,name:"Skipping exercise",category:"Health",color:"#16967a",count:4,trigger:"Feeling short on time",intention:"I will do the 10-minute version"},
-  {id:7,name:"Overcommitting",category:"Boundaries",color:"#c34f8c",count:2,trigger:"Finding it hard to say no",intention:"I will check my calendar first"},
-  {id:8,name:"Harsh self-criticism",category:"Mindfulness",color:"#4b85a8",count:6,trigger:"Mistakes or comparison",intention:"I will speak to myself like a friend"},
+  {id:1,name:"Procrastinating",category:"Productivity",color:"#6d63d9",count:1,trigger:"Large or unclear tasks",intention:"I will start with just five minutes"},
+  {id:2,name:"Too much phone time",category:"Focus",color:"#3676d8",count:0,trigger:"Tiredness or boredom",intention:"I will leave my phone outside the room"},
+  {id:3,name:"Going to bed late",category:"Health",color:"#8055c8",count:0,trigger:"Watching videos at night",intention:"I will turn screens off at 10:30"},
+  {id:4,name:"Reacting too quickly",category:"Relationships",color:"#dd5f69",count:0,trigger:"Feeling ignored",intention:"I will take three breaths before replying"},
+  {id:5,name:"Unplanned spending",category:"Money",color:"#df9638",count:0,trigger:"Online sales",intention:"I will use the 24-hour waiting rule"},
+  {id:6,name:"Skipping exercise",category:"Health",color:"#16967a",count:0,trigger:"Feeling short on time",intention:"I will do the 10-minute version"},
+  {id:7,name:"Overcommitting",category:"Boundaries",color:"#c34f8c",count:0,trigger:"Finding it hard to say no",intention:"I will check my calendar first"},
+  {id:8,name:"Harsh self-criticism",category:"Mindfulness",color:"#4b85a8",count:0,trigger:"Mistakes or comparison",intention:"I will speak to myself like a friend"},
 ];
 const seedRecords:RecordItem[]=[
   {id:1,mistakeId:1,date:"Today, 10:20",iso:"2026-07-23",note:"I delayed the report until late morning.",feeling:"Anxious",lesson:"Break it into three small steps."},
-  {id:2,mistakeId:2,date:"Yesterday, 22:40",iso:"2026-07-22",note:"I scrolled without purpose for an hour.",feeling:"Tired",lesson:"Keep my phone out of the bedroom."},
-  {id:3,mistakeId:4,date:"2 days ago",iso:"2026-07-21",note:"I answered before listening fully.",feeling:"Upset",lesson:"Practice a three-breath pause."},
-  {id:4,mistakeId:3,date:"3 days ago",iso:"2026-07-20",note:"I stayed awake until 1 a.m.",feeling:"Bored",lesson:"Set a screen-off reminder."},
 ];
 const seedCommitments:Commitment[]=[
   {id:1,mistakeId:1,title:"25 minutes of distraction-free work",due:"2026-07-24",status:"pending",reason:"Reset after today's delay"},
-  {id:2,mistakeId:2,title:"One night with the phone outside",due:"2026-07-23",status:"pending",reason:"Restore my focus"},
-  {id:3,mistakeId:4,title:"Write one empathetic message",due:"2026-07-25",status:"pending",reason:"Repair the relationship"},
-  {id:4,mistakeId:3,title:"Sleep before 11 p.m.",due:"2026-07-20",status:"done",reason:"Protect tomorrow's energy"},
 ];
-const weekly=[{day:"Mon",count:3},{day:"Tue",count:2},{day:"Wed",count:4},{day:"Thu",count:2},{day:"Fri",count:1},{day:"Sat",count:2},{day:"Sun",count:1}];
+const weekly=[{day:"Mon",count:0},{day:"Tue",count:0},{day:"Wed",count:0},{day:"Thu",count:0},{day:"Fri",count:0},{day:"Sat",count:0},{day:"Sun",count:1}];
 const nav=[["dashboard","My Today",Gauge],["mistakes","My Patterns",Brain],["commitments","My Commitments",Target],["journal","Growth Journal",BookOpenCheck],["insights","Insights",BarChart3],["archive","History",History],["settings","Settings",Settings]] as const;
 
 export function DisciplineApp(){

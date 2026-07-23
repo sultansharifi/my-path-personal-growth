@@ -27,28 +27,22 @@ function loadAccounts():LocalAccount[]{
 }
 
 const defaultMistakeTypes:Mistake[] = [
-  {id:1,name:"به‌تعویق انداختن کارها",category:"بهره‌وری",color:"#6d63d9",count:7,trigger:"کارهای بزرگ و مبهم",intention:"فقط ۵ دقیقه شروع می‌کنم"},
-  {id:2,name:"استفاده بیش‌ازحد از موبایل",category:"تمرکز",color:"#3676d8",count:5,trigger:"خستگی یا بی‌حوصلگی",intention:"موبایل را از اتاق خارج می‌کنم"},
-  {id:3,name:"دیر خوابیدن",category:"سلامت",color:"#8055c8",count:4,trigger:"تماشای ویدیو در شب",intention:"ساعت ۱۰:۳۰ صفحه‌ها را خاموش می‌کنم"},
-  {id:4,name:"واکنش عجولانه",category:"روابط",color:"#dd5f69",count:3,trigger:"احساس نادیده‌گرفته‌شدن",intention:"سه نفس می‌کشم و بعد پاسخ می‌دهم"},
-  {id:5,name:"خرج بدون برنامه",category:"مالی",color:"#df9638",count:2,trigger:"خرید آنلاین و تخفیف",intention:"قانون انتظار ۲۴ ساعته"},
-  {id:6,name:"رها کردن ورزش",category:"سلامت",color:"#16967a",count:4,trigger:"کمبود وقت",intention:"نسخه کوتاه ۱۰ دقیقه‌ای انجام می‌دهم"},
-  {id:7,name:"قول بیش‌ازحد",category:"مرزبندی",color:"#c34f8c",count:2,trigger:"سختی نه گفتن",intention:"قبل از پاسخ تقویمم را بررسی می‌کنم"},
-  {id:8,name:"انتقاد سخت از خود",category:"ذهن‌آگاهی",color:"#4b85a8",count:6,trigger:"اشتباه یا مقایسه",intention:"با خودم مثل یک دوست حرف می‌زنم"},
+  {id:1,name:"به‌تعویق انداختن کارها",category:"بهره‌وری",color:"#6d63d9",count:1,trigger:"کارهای بزرگ و مبهم",intention:"فقط ۵ دقیقه شروع می‌کنم"},
+  {id:2,name:"استفاده بیش‌ازحد از موبایل",category:"تمرکز",color:"#3676d8",count:0,trigger:"خستگی یا بی‌حوصلگی",intention:"موبایل را از اتاق خارج می‌کنم"},
+  {id:3,name:"دیر خوابیدن",category:"سلامت",color:"#8055c8",count:0,trigger:"تماشای ویدیو در شب",intention:"ساعت ۱۰:۳۰ صفحه‌ها را خاموش می‌کنم"},
+  {id:4,name:"واکنش عجولانه",category:"روابط",color:"#dd5f69",count:0,trigger:"احساس نادیده‌گرفته‌شدن",intention:"سه نفس می‌کشم و بعد پاسخ می‌دهم"},
+  {id:5,name:"خرج بدون برنامه",category:"مالی",color:"#df9638",count:0,trigger:"خرید آنلاین و تخفیف",intention:"قانون انتظار ۲۴ ساعته"},
+  {id:6,name:"رها کردن ورزش",category:"سلامت",color:"#16967a",count:0,trigger:"کمبود وقت",intention:"نسخه کوتاه ۱۰ دقیقه‌ای انجام می‌دهم"},
+  {id:7,name:"قول بیش‌ازحد",category:"مرزبندی",color:"#c34f8c",count:0,trigger:"سختی نه گفتن",intention:"قبل از پاسخ تقویمم را بررسی می‌کنم"},
+  {id:8,name:"انتقاد سخت از خود",category:"ذهن‌آگاهی",color:"#4b85a8",count:0,trigger:"اشتباه یا مقایسه",intention:"با خودم مثل یک دوست حرف می‌زنم"},
 ];
 const initialRecords:RecordItem[] = [
   {id:1,mistakeId:1,date:"امروز، ۱۰:۲۰",iso:"2026-07-23",note:"گزارش را تا آخر صبح عقب انداختم.",feeling:"اضطراب",lesson:"کار را به سه بخش کوچک تقسیم کنم."},
-  {id:2,mistakeId:2,date:"دیروز، ۲۲:۴۰",iso:"2026-07-22",note:"یک ساعت بی‌هدف در شبکه‌های اجتماعی بودم.",feeling:"خستگی",lesson:"موبایل شب‌ها بیرون اتاق بماند."},
-  {id:3,mistakeId:4,date:"۲ روز پیش",iso:"2026-07-21",note:"پیش از شنیدن کامل حرف طرف مقابل جواب دادم.",feeling:"ناراحتی",lesson:"مکث سه‌نفسه را تمرین کنم."},
-  {id:4,mistakeId:3,date:"۳ روز پیش",iso:"2026-07-20",note:"تا ساعت یک شب بیدار ماندم.",feeling:"بی‌حوصلگی",lesson:"یادآور خاموشی صفحه را فعال کنم."},
 ];
 const initialCommitments:Commitment[] = [
   {id:1,mistakeId:1,title:"۲۵ دقیقه کار بدون حواس‌پرتی",due:"2026-07-24",status:"pending",reason:"برای جبران تعویق امروز"},
-  {id:2,mistakeId:2,title:"یک شب بدون موبایل در اتاق خواب",due:"2026-07-23",status:"pending",reason:"برای بازگرداندن تمرکز"},
-  {id:3,mistakeId:4,title:"نوشتن یک پیام همدلانه",due:"2026-07-25",status:"pending",reason:"برای ترمیم رابطه"},
-  {id:4,mistakeId:3,title:"خواب پیش از ۱۱ شب",due:"2026-07-20",status:"done",reason:"مراقبت از انرژی فردا"},
 ];
-const weekly=[{day:"شنبه",count:3},{day:"یکشنبه",count:2},{day:"دوشنبه",count:4},{day:"سه‌شنبه",count:2},{day:"چهارشنبه",count:1},{day:"پنجشنبه",count:2},{day:"جمعه",count:1}];
+const weekly=[{day:"شنبه",count:0},{day:"یکشنبه",count:0},{day:"دوشنبه",count:0},{day:"سه‌شنبه",count:0},{day:"چهارشنبه",count:0},{day:"پنجشنبه",count:1},{day:"جمعه",count:0}];
 const nav=[
   ["dashboard","امروز من",Gauge],["mistakes","الگوهای من",Brain],["commitments","تعهدهای من",Target],
   ["journal","دفترچه رشد",BookOpenCheck],["insights","بینش‌ها",BarChart3],["archive","تاریخچه",History],
